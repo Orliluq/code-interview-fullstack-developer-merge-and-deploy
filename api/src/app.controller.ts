@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Post, Body } from '@nestjs/common';
+import { ValidationService } from './app.service';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+@Controller('api/validation')
+export class ValidationController {
+  constructor(private readonly validationService: ValidationService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post()
+  validateRut(@Body('rut') rut: string): boolean {
+    return this.validationService.validateRut(rut);
   }
 }
