@@ -1,13 +1,28 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  rut: string = '';
+  hasSubmitted: boolean = false;
+  validatorResult: any;
+  showButton: boolean = false;
+
+  checkInput() {
+    this.showButton = this.rut.trim() !== '';
+  }
+  validateRut() {
+    this.hasSubmitted = true;
+    this.validatorResult = { isValid: this.rut.length > 7 };
+  }
+
+  ngOnInit(): void {}
   title = 'frontend';
 }
