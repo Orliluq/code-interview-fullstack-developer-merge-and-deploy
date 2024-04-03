@@ -1,11 +1,14 @@
+/* eslint-disable prettier/prettier */
+import * as functions from 'firebase-functions';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+let app: any;
 
 async function createApp() {
   try {
-    const app = await NestFactory.create(AppModule, { cors: true });
+    app = await NestFactory.create(AppModule, { cors: true });
     app.enableCors();
     return app;
   } catch (error) {
@@ -14,10 +17,11 @@ async function createApp() {
   }
 }
 
-async function startServer() {
-  const app = await createApp();
-  await app.listen(PORT);
+export const startServer = functions.https.onRequest(async (req, res) => {
+  if (!app) {
+    app = await createApp();
+  }
+  await app.listen(process.env.PORT || 3000);
   console.log(`Servidor ejecutándose en el puerto ${PORT}`);
-}
-
-startServer();
+  res.send('Hello from NestJS!');
+});
